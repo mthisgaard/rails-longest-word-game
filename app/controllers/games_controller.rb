@@ -18,18 +18,18 @@ class GamesController < ApplicationController
     @included = included?(@word, @letters)
     @english_word = english_word?(@word)
     @points = points(@word, @included, @english_word)
-    #@total = total_score(@points)
+    @total = total_score(@points)
   end
 
   private
 
-  # def total_score(points)
-  #   if points.zero? && session[:total_score].nil?
-  #     0
-  #   else
-  #     session[:total_score] = points
-  #   end
-  # end
+  def total_score(points)
+    if session[:total_score].nil?
+      session[:total_score] = points
+    else
+      session[:total_score] += points
+    end
+  end
 
   def points(word, included, english_word)
     if included && english_word
