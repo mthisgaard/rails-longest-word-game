@@ -3,35 +3,44 @@ require 'json'
 
 class GamesController < ApplicationController
   def new
+    vowels = %w[A E I O U Y]
     grid = []
-    10.times do
-      grid << ('a'..'z').to_a.sample
+    5.times do
+      grid << vowels.sample
+      grid << (('A'..'Z').to_a - vowels).sample
     end
-    @letters = grid
+    @letters = grid.shuffle
   end
 
   def score
-    params[:word] = params[:word].upcase
-    session[:total_score] = 0
-    @result =
-      if params[:word].upcase.chars.all? { |letter| params[:word].count(letter) <= params[:letters].count(letter) }
-        [0, session[:total_score], "Sorry but #{params[:word]} can't be built out of #{params[:letters].gsub(' ', ', ').upcase}"]
-      elsif !english_word?(params[:word])
-        [0, session[:total_score], "Sorry but #{params[:word]} does not seem to be a valid English word..."]
-      else
-        [score(params[:word]), session[:total_score], "Congratulations! #{params[:word]} is a valid English word!"]
-      end
+    @letters = params[:letters].split
+    @word = params[:word].upcase
+    @included = included?(@word, @letters)
+    @english_word = english_word?(@word)
+    @points = points(@word, @included, @english_word)
+    #@total = total_score(@points)
   end
 
   private
 
-  def score(word)
-    score = params[:word].length
-    if session[:total_score].nil?
-      session[:total_score] = score
+  # def total_score(points)
+  #   if points.zero? && session[:total_score].nil?
+  #     0
+  #   else
+  #     session[:total_score] = points
+  #   end
+  # end
+
+  def points(word, included, english_word)
+    if included && english_word
+      word.length
     else
-      session[:total_score] += score
+      0
     end
+  end
+
+  def included?(word, letters)
+    word.chars.all? { |letter| word.count(letter) <= letters.count(letter) }
   end
 
   def english_word?(word)
