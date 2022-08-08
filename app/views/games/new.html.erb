@@ -1,8 +1,10 @@
 <div class="container mt-4">
   <h1>New game</h1>
-  <div class="mt-3 mb-3">
+  <div class="letter-container">
     <% @letters.each do |letter| %>
-      <%=letter%>
+      <div class="letter">
+        <%=letter.upcase%>
+      </div>
     <%end%>
   </div>
   <div>
@@ -10,9 +12,10 @@
       <label for="word">What is the longest word you can find?</label>
       <div class="d-flex mt-2">
         <input class="form-control" id="word" type="text" name="word">
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <%= hidden_field_tag :letters, @letters %>
         <input class="btn btn-primary" type="submit" value="Play!">
       </div>
-      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
     </form>
   </div>
 </div>

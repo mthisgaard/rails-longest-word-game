@@ -1,4 +1,10 @@
 <div class="container mt-4">
   <h1>Result</h1>
-  <p><%= link_to 'Play again', new_path %></p>
+  <p><%=@result[2]%></p>
+  <br>
+  <p>Your word: <%=params[:word]%></p>
+  <p>Time taken: <%=@time_taken%></p>
+  <p>Your score: <%=@result[0]%></p>
+  <p>Total score: <%=@result[1]%></p>
+  <p class="btn btn-primary"><%= link_to 'Play again', new_path %></p>
 </div>
